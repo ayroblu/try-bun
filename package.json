@@ -1,0 +1,9 @@
+{
+  "name": "try-bun",
+  "module": "index.ts",
+  "type": "module",
+  "devDependencies": {
+    "bun-types": "latest",
+    "typescript": "^5.2.2"
+  }
+}
