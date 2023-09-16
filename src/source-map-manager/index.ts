@@ -17,7 +17,6 @@ export async function convertText(
   const modifiedParts = await Promise.all(
     parts.map(async (part) => {
       if (typeof part === "string") return part;
-      console.log("hi");
       const { filename, line, column } = part;
       const result = await safeResolve(
         filename,
@@ -88,7 +87,6 @@ async function resolve(
   return sourceMap.SourceMapConsumer.with(map, null, (smc) => {
     const pos = smc.originalPositionFor({ line, column });
     if (!pos.source || !pos.line || !pos.column) {
-      console.log(pos.source, pos.line, pos.column);
       throw new Error("Mapping not found");
     }
     const resultPos = {
@@ -121,7 +119,6 @@ export async function safeResolve(
   column: number,
 ): Promise<SafeReturn<Awaited<ReturnType<typeof resolve>>>> {
   try {
-    console.log("convert parts", path);
     return {
       data: await resolve(path, line, column),
       success: true,

@@ -1,4 +1,4 @@
-import { convertText, safeResolve } from "./source-map-manager";
+import { safeResolve } from "./source-map-manager";
 
 const [filename] = process.argv.slice(2);
 
@@ -20,12 +20,12 @@ const profileJson = Bun.file(filename);
     const event = traceEvents[i];
 
     if (event.args.data?.url) {
-      handleSourceItem(event.args.data);
+      await handleSourceItem(event.args.data);
     } else if (event.args.data?.cpuProfile?.nodes) {
       const nodes = event.args.data?.cpuProfile?.nodes;
       for (const node of nodes) {
         if (node.callFrame?.url) {
-          handleSourceItem(node.callFrame);
+          await handleSourceItem(node.callFrame);
         }
       }
     }
@@ -44,7 +44,7 @@ async function handleSourceItem(item: {
   columnNumber: number;
 }) {
   const { url, columnNumber, lineNumber } = item;
-  if (!url.includes("abs.twimg.com")) {
+  if (!url.includes("abs.twimg.com/gryphon-client-staging")) {
     return;
   }
   const result = await safeResolve(url, lineNumber + 1, columnNumber + 1);
